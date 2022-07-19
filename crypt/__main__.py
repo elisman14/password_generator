@@ -1,6 +1,12 @@
-from crypt.pass_generator import PasswordGenerator, PasswordGeneratorV1
+from email import generator
+from crypt.pass_generator import PasswordGenerator
+from crypt import factories
 
 
 def start() -> None:
-    pg:PasswordGenerator = PasswordGeneratorV1()
-    pg.generation()
+    generator: PasswordGenerator = factories.getPasswordGenerator()
+    generator.generate()
+
+
+if __name__ == "__main__":
+    start()

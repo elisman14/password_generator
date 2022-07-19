@@ -1,23 +1,26 @@
 import random
 import string
 from typing import Protocol
+from crypt.saver import PasswordSaver
 
 
 class PasswordGenerator(Protocol):
     def generation(self) -> None: ...
 
-class PasswordGeneratorV1:
-    def __init__(self) -> None:
-        pass
+class RandomChoicePasswordGenerator:
+    def __init__(
+        self,
+        saver: PasswordSaver  
+    ) -> None:
+        self.saver = saver
 
-    def generation(self) -> None:
-        alphabet: list[str] = self.alph_generation()
-        password: str = self.pass_generation(alphabet)
-        with open("./tests/password.txt", "w") as f:
-            f.write(password)
+    def generate(self) -> None:
+        alphabet: list[str] = self._alphabet_generate()
+        password: str = self._password_generate(alphabet)
+        self.saver.save(password)
 
-    def pass_generation(self, alph: list[str]) -> str:
+    def _password_generate(self, alph: list[str]) -> str:
         return "".join(random.choices(alph, k=20))
 
-    def alph_generation(self) -> list[str]:
+    def _alphabet_generate(self) -> list[str]:
         return list(string.ascii_letters + string.digits + "!@#$%^&*()")
